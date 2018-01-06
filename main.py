@@ -20,9 +20,9 @@ def st():
             a = get_stat(i)
             for q in wallets[i]:
                 const = 43200
-                message = a[0] + "\nПрибыль(в мес.): " + str(int((float(a[1]) * const))) + "$\nСолей: " + str(int(float(a[2]))) +"Sol/s"
+                message = a[0] + "\nProfit(month): " + str(int((float(a[1]) * const))) + "$\nSpeed: " + str(int(float(a[2]))) +"Sol/s"
                 bot.send_message(q, message)
-        time.sleep(5)
+        time.sleep(3600)
 def check_wallet(ls):
     for i in wallets.keys():
         search = re.findall(ls,i)
@@ -35,7 +35,7 @@ def check_id(ls):
         for q in i:
             ids.append(q)
     for i in ids:
-        search = re.findall(ls,i)
+        search = re.findall(str(ls),str(i))
         if len(search)!=0:
             return False
     return True
@@ -54,13 +54,13 @@ def repeat_all_messages(message):
         if check_id(message.chat.id) and check_wallet(message.text):
             wallets.update({message.text:[message.chat.id]})
             bot.send_message(message.chat.id, "Done, new wallets in base")
-        elif check_id(message.chat.id) and check_wallet(message.text):
+        elif check_id(message.chat.id) and not check_wallet(message.text):
             get_value = wallets[message.text]
             get_value.append(message.chat.id)
             wallets.update({message.text:get_value})
             bot.send_message(message.chat.id, "Done, new user for this wallets")
         elif not check_id(message.chat.id) and not check_wallet(message.text):
-            bot.send_message("Your wallets in base")
+            bot.send_message(message.chat.id, "Your wallets in base")
     else:
         bot.send_message(message.chat.id, "Bad wallet")
 if __name__ == '__main__':
